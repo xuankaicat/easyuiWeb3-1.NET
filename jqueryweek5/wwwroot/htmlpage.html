@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic SideMenu - jQuery EasyUI Demo</title>
+    <script src="~/EasyUI/jquery.min.js" type="text/javascript"></script>
+    <script src="~/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="~/EasyUI/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+
+    <link href="~/EasyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="~/EasyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <h2>Basic SideMenu</h2>
+    <p>Collapse the side menu to display the main icon.</p>
+    <div style="margin:20px 0;">
+        <a href="javascript:;" class="easyui-linkbutton" onclick="toggle()">Toggle</a>
+    </div>
+    <div id="sm" data-toggle="topjui-sidemenu" data-options="data:data"></div>
+    <script type="text/javascript">
+    		var data = [{
+    	        text: 'Item1',
+    	        iconCls: 'icon-sum',
+    	        state: 'open',
+    	        children: [{
+    	            text: 'Option1'
+    	        },{
+    	            text: 'Option2'
+    	        },{
+    	            text: 'Option3',
+    	            children: [{
+    	                text: 'Option31'
+    	            },{
+    	                text: 'Option32'
+    	            }]
+    	        }]
+    	    },{
+    	        text: 'Item2',
+    	        iconCls: 'icon-more',
+    	        children: [{
+    	            text: 'Option4'
+    	        },{
+    	            text: 'Option5'
+    	        },{
+    	            text: 'Option6'
+    	        }]
+    	    }];
+
+    		function toggle(){
+    			var opts = $('#sm').sidemenu('options');
+    			$('#sm').sidemenu(opts.collapsed ? 'expand' : 'collapse');
+    			opts = $('#sm').sidemenu('options');
+    			$('#sm').sidemenu('resize', {
+    				width: opts.collapsed ? 60 : 200
+    			})
+    		}
+    </script>
+</body>
+</html>

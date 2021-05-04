@@ -1,0 +1,76 @@
+﻿@model AdminEditViewModel
+
+<form id="ddform">
+    <input id="HdId" hidden asp-for="Id" />
+    <div id="divU">
+        <table cellpadding="0" cellspacing="1" border="0" style="width: 100%;" bgcolor="b5d6e6">
+            <tr style="background-color: White; height: 32px;">
+                <td style="width: 80px; padding-left: 5px">
+                    <label asp-for="登录名称"></label>
+                </td>
+                <td style="padding: 5px">
+                    <input id="name" asp-for="登录名称" class="easyui-validatebox" required validType="isNameInUse" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" />
+                </td>
+            </tr>
+            <tr style="background-color: White; height: 32px;">
+                <td style="padding: 5px">
+                    <label asp-for="密码"></label>
+                </td>
+                <td style="padding: 5px">
+                    <input id="pwd" asp-for="密码" class="easyui-validatebox" required style="border: 1px solid #8DB2E3; width: 200px; height: 20px" />
+                </td>
+            </tr>
+            <tr style="background-color: White; height: 32px;">
+                <td style="padding: 5px">
+                    <label asp-for="重复密码"></label>
+                </td>
+                <td style="padding: 5px">
+                    <input asp-for="重复密码" class="easyui-validatebox" required validType="equals['#pwd']" style="border: 1px solid #8DB2E3; width: 200px; height: 20px" />
+                </td>
+            </tr>
+            <tr style="background-color: White; height: 32px;">
+                <td style="padding: 5px">
+                    <label asp-for="联系电话"></label>
+                </td>
+                <td style="padding: 5px">
+                    <input asp-for="联系电话" class="easyui-validatebox" required style="border: 1px solid #8DB2E3; width: 200px; height: 20px" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div border="false" style="text-align: right; height: 30px; line-height: 30px;padding-top:7px">
+        <button type="button" class="easyui-linkbutton" icon="icon-ok" onclick="editEnd()">确定</button>
+        <a id="A4" class="easyui-linkbutton" onclick='$("#dd2").dialog("close");' icon="icon-cancel" href="javascript:void(0)">
+            取消
+        </a>
+    </div>
+</form>
+
+<script>
+    var res;
+    $.extend($.fn.validatebox.defaults.rules, {
+        equals: {
+            validator: function (value, param) {
+                return value == $(param[0]).val();
+            },
+            message: '两次输入密码不同'
+        },
+        isNameInUse: {
+            validator: function (value) {
+                $.ajax({
+                    url: '../Admin/IsNameInUse',
+                    data: { name: value, id: $('#HdId').attr('value') },
+                    type: "get",
+                    dataType: "json",
+                    async: false,
+                    success: function (datas) {
+                        res = datas == true;
+                    }
+                });
+                console.log(res);
+                return res;
+            },
+            message: '该登录名称已存在'
+        }
+    });
+</script>

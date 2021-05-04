@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "主页";
+}
+
+@section Links{
+    <script src="~/EasyUI/jquery.min.js" type="text/javascript"></script>
+    <script src="~/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="~/EasyUI/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+
+    <link href="~/EasyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="~/EasyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+}
+
+<div region="north" class="header" style="background: #fafafa; color: #2d5593; height: 40px;">
+    <div style="font-size: 16px; font-weight: bold; width: 400px; padding: 10px 0 0 10px;">库存管理系统</div>
+</div>
+
+<div id="smbox" region="west" title="系统功能" split="true" style="width: 200px;" data-options="onResize:changeSmWidth(),draggable:false">
+    <div id="sm" class="easyui-sidemenu sidemenu" data-options="data:data, onSelect:smSelected" style="width:100%"></div>
+</div>
+
+<div region="center">
+    <div id="main-center" class="easyui-tabs" fit="true" border="false">
+        <div title="首页" style="padding: 20px;">
+            <div style="margin-top: 20px;">
+                <p>@{
+                    int hour = DateTime.Now.Hour;
+                    string str = "";
+                    if(hour <= 10) { str = "早上好，"; }
+                    else if(hour < 14) { str = "中午好，"; }
+                    else if(hour < 20) { str = "下午好，"; }
+                    else { str = "晚上好，"; }
+                    @str
+                    @Context.User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div region="south">
+    <a asp-controller="account" asp-action="logout">退出登录</a>
+</div>
+
+@section Scripts{
+    <script>
+        function addTab(title, href) {
+            var tt = $('#main-center');
+            if (tt.tabs('exists', title)) {
+                tt.tabs('select', title);
+            } else {
+                if (href) {
+                    var content = '<iframe frameborder="0"  src="' + href + '" style="width:100%;height:100%;vertical-align:top"></iframe>';
+                } else {
+                    var content = '未实现';
+                }
+                tt.tabs('add', {
+                    title: title,
+                    closable: true,
+                    content: content
+                });
+            }
+        }
+
+        var data =
+        [{
+            text: '库存管理系统',
+            iconCls: 'fa fa-wpforms',
+            state: 'open',
+            children:
+            [
+                {
+                    text: '库存管理',
+                    url: 'Product',
+                    click: 'out'
+                },
+                {
+                    text: '产品销售管理',
+                    url: 'Sale',
+                    click: 'out'
+                },
+                {
+                    text: '管理员管理',
+                    url: 'Admin',
+                    click: 'out'
+                }
+                //},
+                //{
+                //    text: 'Option3',
+                //    children:
+                //    [
+                //        {
+                //            text: 'Option31'
+                //        },
+                //        {
+                //            text: 'Option32'
+                //        }
+                //    ]
+                //}
+            ]
+        }];
+
+        function smSelected(item) {
+            addTab(item.text, item.url);
+        }
+
+        function changeSmWidth() {
+            $('#sm').sidemenu('resize', {
+                width: $('#smbox').width
+            });
+        }
+
+        function toggle() {
+            var opts = $('#sm').sidemenu('options');
+            $('#sm').sidemenu(opts.collapsed ? 'expand' : 'collapse');
+            opts = $('#sm').sidemenu('options');
+            $('#sm').sidemenu('resize', {
+                width: opts.collapsed ? 60 : 200
+            })
+        }
+    </script>
+}
